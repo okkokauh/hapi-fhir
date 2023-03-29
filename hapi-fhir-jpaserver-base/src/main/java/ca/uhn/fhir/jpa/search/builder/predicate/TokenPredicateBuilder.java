@@ -246,8 +246,8 @@ public class TokenPredicateBuilder extends BaseSearchParamPredicateBuilder {
 
 			long hashIdentity = BaseResourceIndexedSearchParam.calculateHashIdentity(getPartitionSettings(), theRequestPartitionId, theResourceName, paramName);
 			Condition hashIdentityPredicate = BinaryCondition.equalTo(getColumnHashIdentity(), generatePlaceholder(hashIdentity));
-
-			Condition hashValuePredicate = createPredicateOrList(theResourceName, paramName, sortedCodesList, false);
+			Condition hashValuePredicate =
+				createPredicateOrList(theResourceName, paramName, sortedCodesList, codes.size() > 1);
 			predicate = QueryParameterUtils.toAndPredicate(hashIdentityPredicate, hashValuePredicate);
 
 		} else {
