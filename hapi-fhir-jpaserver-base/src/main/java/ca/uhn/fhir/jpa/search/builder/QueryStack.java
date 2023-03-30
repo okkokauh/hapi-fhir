@@ -1558,7 +1558,7 @@ public class QueryStack {
 
 		List<IQueryParameterType> tokens = new ArrayList<>();
 
-		boolean paramInverted = false;
+		boolean multiCodeParamInverted = false;
 		TokenParamModifier modifier;
 
 		for (IQueryParameterType nextOr : theList) {
@@ -1583,9 +1583,9 @@ public class QueryStack {
 
 					modifier = id.getModifier();
 					// for :not modifier, create a token and remove the :not modifier
-					if (modifier == TokenParamModifier.NOT) {
+					if (modifier == TokenParamModifier.NOT && theList.size() > 1) {
 						tokens.add(new TokenParam(((TokenParam) nextOr).getSystem(), ((TokenParam) nextOr).getValue()));
-						paramInverted = true;
+						multiCodeParamInverted = true;
 					} else {
 						tokens.add(nextOr);
 					}
@@ -1603,15 +1603,24 @@ public class QueryStack {
 		Condition predicate;
 		BaseJoiningPredicateBuilder join;
 
-		if (paramInverted) {
+		if (multiCodeParamInverted) {
+			//We have multiple codes with :not (e.g. param:not=code1,code2,...)
 			SearchQueryBuilder sqlBuilder = theSqlBuilder.newChildSqlBuilder();
 			TokenPredicateBuilder tokenSelector = sqlBuilder.addTokenPredicateBuilder(null);
-			sqlBuilder.addPredicate(tokenSelector.createPredicateToken(tokens, theResourceName, theSpnamePrefix, theSearchParam, theRequestPartitionId));
+			sqlBuilder.addPredicate(
+				tokenSelector.createPredicateToken(
+					tokens,
+					theResourceName,
+					theSpnamePrefix,
+					theSearchParam,
+					theRequestPartitionId
+				)
+			);
 			SelectQuery sql = sqlBuilder.getSelect();
 			Expression subSelect = new Subquery(sql);
 
 			join = theSqlBuilder.getOrCreateFirstPredicateBuilder();
-
+			//Make a query with NOT IN subqueries
 			if (theSourceJoinColumn == null) {
 				predicate = new InCondition(join.getResourceIdColumn(), subSelect).setNegate(true);
 			} else {
