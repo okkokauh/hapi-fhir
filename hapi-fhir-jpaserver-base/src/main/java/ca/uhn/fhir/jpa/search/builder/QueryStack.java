@@ -1613,7 +1613,6 @@ public class QueryStack {
 					theResourceName,
 					theSpnamePrefix,
 					theSearchParam,
-					SearchFilterParser.CompareOperation.ne,
 					theRequestPartitionId
 				)
 			);
