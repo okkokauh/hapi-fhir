@@ -23,21 +23,6 @@
 		<url>https://github.com/hapifhir/hapi-fhir/issues/</url>
 	</issueManagement>
 
-	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-		<repository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
-		<site>
-			<id>git.server</id>
-			<url>scm:git:git@github.com:hapifhir/hapi-fhir.git</url>
-		</site>
-	</distributionManagement>
-
 	<scm>
 		<connection>scm:git:git@github.com:hapifhir/hapi-fhir.git</connection>
 		<url>scm:git:git@github.com:hapifhir/hapi-fhir.git</url>
@@ -873,6 +858,8 @@
         <maven.compiler.testSource>17</maven.compiler.testSource>
 		  <maven.compiler.testTarget>17</maven.compiler.testTarget>
 		  <maven.compiler.testRelease>17</maven.compiler.testRelease>
+
+		  <maven.deploy.skip>true</maven.deploy.skip>
     </properties>
 
 	<dependencyManagement>
@@ -3043,6 +3030,22 @@
 					</plugin>
 				</plugins>
 			</build>
+		</profile>
+		<profile>
+			<id>github-maven</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<distributionManagement>
+				<repository>
+					<id>github-maven</id>
+					<url>${env.PACKAGES_REPOSITORY}</url>
+				</repository>
+				<snapshotRepository>
+					<id>github-maven</id>
+					<url>${env.PACKAGES_REPOSITORY}</url>
+				</snapshotRepository>
+			</distributionManagement>
 		</profile>
 	</profiles>
 </project>

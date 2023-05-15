@@ -46,6 +46,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 
 import javax.annotation.Nonnull;
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -62,6 +63,9 @@ public class ReindexStep implements IJobStepWorker<ReindexJobParameters, Resourc
 	private DaoRegistry myDaoRegistry;
 	@Autowired
 	private IIdHelperService myIdHelperService;
+
+	@Autowired
+	private EntityManager myEntityManager;
 
 	@Nonnull
 	@Override
@@ -128,6 +132,11 @@ public class ReindexStep implements IJobStepWorker<ReindexJobParameters, Resourc
 					String resourceId = nextResourceType + "/" + resourceForcedId;
 					ourLog.debug("Failure during reindexing {}", resourceId, e);
 					myDataSink.recoveredError("Failure reindexing " + resourceId + ": " + e.getMessage());
+				}
+
+				if (i % 20 == 0) {
+					myEntityManager.flush();
+					myEntityManager.clear();
 				}
 			}
 

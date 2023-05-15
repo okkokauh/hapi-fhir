@@ -11,17 +11,23 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>hapi-fhir-storage-batch2-jobs</artifactId>
+	<version>6.2.4-reindex-perf-tempfix</version>
+
+	<properties>
+		<maven.deploy.skip>false</maven.deploy.skip>
+		<mainVersion>6.2.4</mainVersion>
+	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>ca.uhn.hapi.fhir</groupId>
 			<artifactId>hapi-fhir-base</artifactId>
-			<version>${project.version}</version>
+			<version>${mainVersion}</version>
 		</dependency>
 		<dependency>
 			<groupId>ca.uhn.hapi.fhir</groupId>
 			<artifactId>hapi-fhir-storage-batch2</artifactId>
-			<version>${project.version}</version>
+			<version>${mainVersion}</version>
 		</dependency>
 
 		<dependency>
@@ -34,7 +40,7 @@
 		<dependency>
 			<groupId>ca.uhn.hapi.fhir</groupId>
 			<artifactId>hapi-fhir-test-utilities</artifactId>
-			<version>${project.version}</version>
+			<version>${mainVersion}</version>
 			<scope>test</scope>
 		</dependency>
 
