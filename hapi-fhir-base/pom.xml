@@ -10,6 +10,7 @@
 	</parent>
 
 	<artifactId>hapi-fhir-base</artifactId>
+	<version>6.2.4.1-reindex-perf-tempfix-j</version>
 	<packaging>bundle</packaging>
 
 	<url>http://jamesagnew.github.io/hapi-fhir/</url>
